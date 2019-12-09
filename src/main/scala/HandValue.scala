@@ -1,7 +1,7 @@
 import Orderings._
 
 sealed trait HandValue {
-  def ranks: Seq[Rank] = Seq.empty
+  def ranks: Seq[Rank]
   def toint: Int =
     this match {
       case HighCard(_) => 1
@@ -18,15 +18,15 @@ sealed trait HandValue {
   def compare(that: HandValue): Int = compareRankSequences(this.ranks, that.ranks)
 }
 
-case class StraightFlush(override val ranks: Seq[Rank]) extends HandValue
-case class FourOfKinds(override val ranks: Seq[Rank]) extends HandValue
-case class FullHouse(override val ranks: Seq[Rank]) extends HandValue
-case class Flush(override val ranks: Seq[Rank]) extends HandValue
-case class Straight(override val ranks: Seq[Rank]) extends HandValue
-case class ThreeOfKinds(override val ranks: Seq[Rank]) extends HandValue
-case class TwoPairs(override val ranks: Seq[Rank]) extends HandValue
-case class TwoOfKinds(override val ranks: Seq[Rank]) extends HandValue
-case class HighCard(override val ranks: Seq[Rank]) extends HandValue
+case class StraightFlush(ranks: Seq[Rank]) extends HandValue
+case class FourOfKinds(ranks: Seq[Rank]) extends HandValue
+case class FullHouse(ranks: Seq[Rank]) extends HandValue
+case class Flush(ranks: Seq[Rank]) extends HandValue
+case class Straight(ranks: Seq[Rank]) extends HandValue
+case class ThreeOfKinds(ranks: Seq[Rank]) extends HandValue
+case class TwoPairs(ranks: Seq[Rank]) extends HandValue
+case class TwoOfKinds(ranks: Seq[Rank]) extends HandValue
+case class HighCard(ranks: Seq[Rank]) extends HandValue
 
 object HandValue {
   def isStraight(cards: Seq[Card]): Boolean = {

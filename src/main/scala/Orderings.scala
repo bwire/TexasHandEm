@@ -10,7 +10,8 @@ object Orderings {
   }
 
   implicit object RankOrdering extends Ordering[Rank] {
-    def compare(x: Rank, y: Rank): Int = y compare x // descending by default
+    // descending intentionally
+    def compare(x: Rank, y: Rank): Int = y compare x
   }
 
   implicit object CardOrdering extends Ordering[Card] {
