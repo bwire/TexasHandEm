@@ -15,8 +15,6 @@ sealed trait Rank {
       case King => 12
       case Ace => 13
     }
-
-  def compare(that: Rank): Int = this.toint compare that.toint
 }
 
 case object Ace extends Rank

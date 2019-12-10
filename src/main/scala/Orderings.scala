@@ -1,23 +1,17 @@
 object Orderings {
-  def compareRankSequences(s1: Seq[Rank], s2: Seq[Rank]): Int = {
-    s1.zip(s2).foldLeft(0) {
-      (acc, pair) => if (acc != 0) acc else pair._1.toint compare pair._2.toint
-    }
-  }
-
   implicit object SuitOrdering extends Ordering[Suit] {
-    def compare(x: Suit, y: Suit): Int = x compare y
+    def compare(x: Suit, y: Suit): Int = x.toint compare y.toint
   }
 
   implicit object RankOrdering extends Ordering[Rank] {
     // descending intentionally
-    def compare(x: Rank, y: Rank): Int = y compare x
+    def compare(x: Rank, y: Rank): Int = y.toint compare x.toint
   }
 
   implicit object CardOrdering extends Ordering[Card] {
     def compare(x: Card, y: Card): Int =
-      x.rank compare y.rank match {
-        case 0 => x.suit compare y.suit
+      x.rank.toint compare y.rank.toint match {
+        case 0 => x.suit.toint compare y.suit.toint
         case v => v
       }
   }
@@ -25,7 +19,9 @@ object Orderings {
   implicit object HandValueOrdering extends Ordering[HandValue] {
     def compare(x: HandValue, y: HandValue): Int =
       x.toint compare y.toint match {
-        case 0 => compareRankSequences(x.ranks, y.ranks)
+        case 0 => (x.ranks).zip(y.ranks).foldLeft(0) {
+          (acc, pair) => if (acc != 0) acc else pair._1.toint compare pair._2.toint
+        }
         case r => r
       }
   }

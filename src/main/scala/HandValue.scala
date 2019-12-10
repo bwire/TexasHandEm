@@ -14,8 +14,6 @@ sealed trait HandValue {
       case FourOfKinds(_) => 8
       case StraightFlush(_) => 9
     }
-
-  def compare(that: HandValue): Int = compareRankSequences(this.ranks, that.ranks)
 }
 
 case class StraightFlush(ranks: Seq[Rank]) extends HandValue

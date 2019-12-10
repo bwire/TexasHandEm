@@ -6,8 +6,6 @@ sealed trait Suit {
       case Diamonds => 3
       case Hearts => 4
     }
-
-  def compare(that: Suit): Int = this.toint compare that.toint
 }
 case object Hearts extends Suit
 case object Diamonds extends Suit
