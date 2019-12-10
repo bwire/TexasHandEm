@@ -40,7 +40,7 @@ object HandValue {
     val hasAce = ranks.head == Ace
     val numbers = ranks map (_.toint)
 
-    if (hasAce)
+    if (hasAce && (ranks.contains(King) || ranks.contains(Two)))
       numbers.tail.toSet == numbers.tail.head.to(numbers.tail.head - 3).by(-1).toSet
     else
       numbers.toSet == numbers.head.to(numbers.head - 4).by(-1).toSet
