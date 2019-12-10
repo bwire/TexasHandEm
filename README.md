@@ -1,4 +1,4 @@
-## Evolution gaming home task
+## Evolution Gaming home task
 
 All data structures are self-explanatory.
 The main idea was to make all calculations inside the Option monad, cause we have some input data and we need to make sure all the data is correct.
