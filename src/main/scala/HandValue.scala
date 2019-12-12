@@ -137,13 +137,11 @@ object HandValue {
     }
   }
 
-  implicit object Ordering extends Ordering[HandValue] {
-    def compare(x: HandValue, y: HandValue): Int =
-      x.toint compare y.toint match {
-        case 0 => (x.ranks).zip(y.ranks).foldLeft(0) {
-          (acc, pair) => if (acc != 0) acc else pair._1.toint compare pair._2.toint
-        }
-        case r => r
+  implicit val ordering: Ordering[HandValue] = (x: HandValue, y: HandValue) =>
+    x.toint compare y.toint match {
+      case 0 => x.ranks.zip(y.ranks).foldLeft(0) {
+        (acc, pair) => if (acc != 0) acc else pair._1.toint compare pair._2.toint
       }
+      case r => r
   }
 }
