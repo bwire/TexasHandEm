@@ -22,5 +22,7 @@ object Suit {
       case _ => None
   }
 
-  implicit val ordering: Ordering[Int] = (x: Suit, y: Suit) => x.toint compare y.toint
+  implicit object Ordering extends Ordering[Suit] {
+    def compare(x: Suit, y: Suit): Int = x.toint compare y.toint
+  }
 }
