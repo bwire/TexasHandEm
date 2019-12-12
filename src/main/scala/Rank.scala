@@ -49,4 +49,9 @@ object Rank {
       case '2' => Some(Two)
       case _ => None
     }
+
+  implicit object Ordering extends Ordering[Rank] {
+    // descending intentionally
+    def compare(x: Rank, y: Rank): Int = y.toint compare x.toint
+  }
 }

@@ -1,5 +1,4 @@
 import Utils._
-import Orderings._
 
 class Game(val board: Board, val hands: Seq[Hand]) {
   override def toString: String = s"Game: Board [$board], Hands [${hands.map(_.name).mkString(" ")}]"

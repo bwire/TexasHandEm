@@ -11,4 +11,12 @@ object Card {
       } yield Card(is, r, s)
       case _ => None
     }
+
+  implicit object Ordering extends Ordering[Card] {
+    def compare(x: Card, y: Card): Int =
+      x.rank.toint compare y.rank.toint match {
+        case 0 => x.suit.toint compare y.suit.toint
+        case v => v
+      }
+  }
 }

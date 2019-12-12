@@ -21,4 +21,8 @@ object Suit {
       case 's' => Some(Spades)
       case _ => None
   }
+
+  implicit object Ordering extends Ordering[Suit] {
+    def compare(x: Suit, y: Suit): Int = x.toint compare y.toint
+  }
 }
