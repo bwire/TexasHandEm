@@ -50,8 +50,5 @@ object Rank {
       case _ => None
     }
 
-  implicit object Ordering extends Ordering[Rank] {
-    // descending intentionally
-    def compare(x: Rank, y: Rank): Int = y.toint compare x.toint
-  }
+  implicit val ordering: Ordering[Rank] = (x: Rank, y: Rank) => y.toint compare x.toint
 }
