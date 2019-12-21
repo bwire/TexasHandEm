@@ -4,18 +4,9 @@ class Game(val board: Board, val hands: Seq[Hand]) {
   override def toString: String = s"Game: Board [$board], Hands [${hands.map(_.name).mkString(" ")}]"
 
   def handCombs(hand: Hand): (Hand, Seq[Seq[Card]]) = {
-    val all: Seq[Card] = board.cards ++ hand.cards
-    val combs = (for {
-      c1 <- all
-      c2 <- all
-      c3 <- all
-      c4 <- all
-      c5 <- all
-    } yield List(c1, c2, c3, c4, c5))
-      .map(_.distinct)
-      .filter(_.length == 5)
-      .map(_.sorted)
-      .distinct
+    val combs = (board.cards ++ hand.cards)
+      .combinations(5)
+      .toSeq
     (hand, combs)
   }
 

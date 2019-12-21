@@ -27,12 +27,6 @@ case class HighCard(ranks: Seq[Rank]) extends HandValue
 
 object HandValue {
   def isStraight(cards: Seq[Card]): Boolean = {
-    val numbers = cards.map(_.rank.toint).sorted
-    val start = numbers.head
-    numbers.toSet == (start to start + 4).toSet
-  }
-
-  def isStraightWithAce(cards: Seq[Card]): Boolean = {
     val ranks = cards.map(_.rank).sorted
     val hasAce = ranks.head == Ace
     val numbers = ranks map (_.toint)
@@ -46,53 +40,43 @@ object HandValue {
   def hasOneSuit(cards: Seq[Card]): Boolean =
     cards.groupBy(_.suit).toSeq.length == 1
 
-
   def makeStraightFlush(data: Seq[Card]): StraightFlush =
     StraightFlush(Seq(data.minBy(_.rank).rank))
 
-  def makeFourOfKinds(data: Seq[(Card, Int)]): FourOfKinds = {
-    val kickerRank = data.head._1.rank
-    val fourRank = data.tail.head._1.rank
-    FourOfKinds(Seq(fourRank, kickerRank))
-  }
+  def makeFourOfKinds(data: Seq[(Card, Int)]): FourOfKinds =
+    data.map(_._1.rank) match {
+      case Seq(kickerRank, fourRank) => FourOfKinds(Seq(fourRank, kickerRank))
+    }
 
-  def makeFullHouse(data: Seq[(Card, Int)]): FullHouse = {
-    val rank2 = data.head._1.rank
-    val rank3 = data.tail.head._1.rank
-    FullHouse(Seq(rank3, rank2))
-  }
+  def makeFullHouse(data: Seq[(Card, Int)]): FullHouse =
+    data.map(_._1.rank) match {
+      case Seq(rank2, rank3) => FullHouse(Seq(rank3, rank2))
+    }
 
   def makeFlush(data: Seq[Card]): Flush = Flush(data.map(_.rank).sorted)
 
   def makeStraight(data: Seq[Card]): Straight = {
-    val cards = data.sortBy(_.rank)
-    val rank = if (cards.head.rank == Ace && cards.tail.head.rank != King)
-      cards.tail.head.rank
-    else
-      cards.head.rank
-    Straight(Seq(rank))
+    data.sortBy(_.rank).map(_.rank) match {
+      case Seq(f, s, _*) => Straight(Seq(if (f == Ace || s != King) s else f))
+    }
   }
 
   def makeThreeOfKinds(data: Seq[(Card, Int)]): ThreeOfKinds = {
-    val rankMain = data.tail.tail.head._1.rank
-    val ranks = Seq(data.head, data.tail.head).map(_._1.rank).sorted
-    val rank1 = ranks.head
-    val rank2 = ranks.tail.head
-    ThreeOfKinds(Seq(rankMain, rank1, rank2))
+    data.map(_._1.rank) match {
+      case Seq(r1, r2, rankMain) => ThreeOfKinds(Seq(rankMain) ++ Seq(r1, r2).sorted)
+    }
   }
 
   def makeTwoPairs(data: Seq[(Card, Int)]): TwoPairs = {
-    val cardRank = data.head._1.rank
-    val ranks = data.tail.map(_._1.rank).sorted
-    val rank1 = ranks.head
-    val rank2 = ranks.tail.head
-    TwoPairs(Seq(rank1, rank2, cardRank))
+    data.map(_._1.rank) match {
+      case Seq(cardRank, pr1, pr2) => TwoPairs(Seq(pr1, pr2).sorted ++ Seq(cardRank))
+    }
   }
 
   def makeTwoOfKinds(data: Seq[(Card, Int)]): TwoOfKinds = {
-    val pairRank = data.last._1.rank
-    val ranks = Seq(data.head, data.tail.head, data.tail.tail.head).map(_._1.rank).sorted
-    TwoOfKinds(Seq(pairRank) ++ ranks)
+    data.map(_._1.rank) match {
+      case Seq(pr, r1, r2, r3) => TwoOfKinds(Seq(pr) ++ Seq(r1, r2, r3).sorted)
+    }
   }
 
   def makeHighCard(data: Seq[Card]): HighCard = HighCard(data.map(_.rank).sorted)
@@ -118,7 +102,7 @@ object HandValue {
     if (hasOneSuit(cards)) {
       if (isStraight(cards)) makeStraightFlush(cards) else makeFlush(cards)
     } else {
-      if (isStraightWithAce(cards)) makeStraight(cards) else makeHighCard(cards)
+      if (isStraight(cards)) makeStraight(cards) else makeHighCard(cards)
     }
   }
 
